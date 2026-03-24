@@ -34,10 +34,25 @@ npm install
 
 ### 2) Configure environment variables
 
-Create these files from examples:
-```bash
-copy backend\.env.example backend\.env
-copy frontend\.env.example frontend\.env
+Create these files manually:
+- `backend/.env`
+- `frontend/.env`
+
+Example `backend/.env`:
+```env
+PORT=4000
+MONGO_URI=mongodb://127.0.0.1:27017/kanban-mvp
+FRONTEND_URL=http://localhost:5173
+ACCESS_TOKEN_SECRET=change-me-access-secret
+REFRESH_TOKEN_SECRET=change-me-refresh-secret
+ACCESS_TOKEN_EXPIRES_IN=15m
+REFRESH_TOKEN_EXPIRES_IN=7d
+```
+
+Example `frontend/.env`:
+```env
+VITE_API_URL=http://localhost:4000/api
+VITE_SOCKET_URL=http://localhost:4000
 ```
 
 Backend required variables:
