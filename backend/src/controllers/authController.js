@@ -132,6 +132,7 @@ async function login(req, res, next) {
 
     return res.json({
       user: toPublicUser(user),
+      workspaceId: primaryBoard?.workspaceId?.toString() || null,
       boardId: primaryBoard?._id.toString() || null,
       ...tokens
     });

@@ -2,6 +2,7 @@ const cors = require('cors');
 const express = require('express');
 
 const authRoutes = require('./routes/authRoutes');
+const workspaceRoutes = require('./routes/workspaceRoutes');
 const boardRoutes = require('./routes/boardRoutes');
 const cardRoutes = require('./routes/cardRoutes');
 const { authMiddleware } = require('./middlewares/authMiddleware');
@@ -27,6 +28,7 @@ function createApp(io) {
   });
 
   app.use('/api/auth', authRoutes);
+  app.use('/api/workspaces', authMiddleware, workspaceRoutes);
   app.use('/api/boards', authMiddleware, boardRoutes);
   app.use('/api/cards', authMiddleware, cardRoutes);
 

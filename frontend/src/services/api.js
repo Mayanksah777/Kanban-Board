@@ -82,6 +82,37 @@ export async function getBoardState(boardId) {
   return data;
 }
 
+export async function getWorkspaces() {
+  const { data } = await api.get('/workspaces');
+  return data;
+}
+
+export async function createWorkspace(payload) {
+  const { data } = await api.post('/workspaces', payload);
+  return data;
+}
+
+export async function addWorkspaceMember(workspaceId, payload) {
+  const { data } = await api.post(`/workspaces/${workspaceId}/members`, payload);
+  return data;
+}
+
+export async function getBoards(workspaceId) {
+  const params = workspaceId ? { workspaceId } : undefined;
+  const { data } = await api.get('/boards', { params });
+  return data;
+}
+
+export async function createBoard(payload) {
+  const { data } = await api.post('/boards', payload);
+  return data;
+}
+
+export async function getBoard(boardId) {
+  const { data } = await api.get(`/boards/${boardId}`);
+  return data;
+}
+
 export async function createCard(payload) {
   const { data } = await api.post('/cards', payload);
   return data;

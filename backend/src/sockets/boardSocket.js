@@ -5,6 +5,10 @@ const { hasVersionConflict } = require('../utils/conflict');
 const { buildBoardState } = require('../utils/boardState');
 const { toClientCard } = require('../utils/serialize');
 
+function boardRoom(boardId) {
+  return `board:${boardId.toString()}`;
+}
+
 function clampIndex(index, max) {
   const numeric = Number.isInteger(index) ? index : 0;
   if (numeric < 0) {
@@ -39,15 +43,17 @@ async function handleBoardJoin(io, socket, payload = {}) {
   const { boardId } = payload;
 
   if (!boardId) {
+    socket.emit('error', 'Unauthorized');
     return;
   }
 
   const board = await userCanAccessBoard(socket.user.id, boardId);
   if (!board) {
+    socket.emit('error', 'Unauthorized');
     return;
   }
 
-  socket.join(boardId.toString());
+  socket.join(boardRoom(boardId));
   const state = await buildBoardState(boardId);
   socket.emit('board:state', state);
 }
@@ -87,7 +93,7 @@ async function handleCardCreate(io, socket, payload = {}) {
   column.cardOrder.push(card._id);
   await column.save();
 
-  io.to(boardId.toString()).emit('card:updated', {
+  io.to(boardRoom(boardId)).emit('card:updated', {
     action: 'created',
     card: toClientCard(card),
     columnId: columnId.toString(),
@@ -134,7 +140,7 @@ async function handleCardUpdate(io, socket, payload = {}) {
   card.version += 1;
   await card.save();
 
-  io.to(boardId.toString()).emit('card:updated', {
+  io.to(boardRoom(boardId)).emit('card:updated', {
     action: 'updated',
     card: toClientCard(card)
   });
@@ -197,7 +203,7 @@ async function handleCardMove(io, socket, payload = {}) {
     card.version += 1;
     await card.save();
 
-    io.to(boardId.toString()).emit('card:moved', {
+    io.to(boardRoom(boardId)).emit('card:moved', {
       card: toClientCard(card),
       sourceColumnId,
       destinationColumnId,
@@ -230,7 +236,7 @@ async function handleCardMove(io, socket, payload = {}) {
   card.version += 1;
   await card.save();
 
-  io.to(boardId.toString()).emit('card:moved', {
+  io.to(boardRoom(boardId)).emit('card:moved', {
     card: toClientCard(card),
     sourceColumnId,
     destinationColumnId,
@@ -281,7 +287,7 @@ async function handleCardDelete(io, socket, payload = {}) {
 
   await card.deleteOne();
 
-  io.to(boardId.toString()).emit('card:updated', {
+  io.to(boardRoom(boardId)).emit('card:updated', {
     action: 'deleted',
     cardId,
     columnId: card.columnId.toString()

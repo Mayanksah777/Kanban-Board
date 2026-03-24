@@ -25,7 +25,8 @@ export default function AuthPage({ onAuthenticated }) {
 
       onAuthenticated({
         user: response.user,
-        boardId: response.boardId,
+        boardId: null,
+        workspaceId: null,
         accessToken: response.accessToken,
         refreshToken: response.refreshToken
       });

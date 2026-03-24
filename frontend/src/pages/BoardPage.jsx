@@ -41,7 +41,7 @@ function resolveDropTarget(overData, boardState) {
   return null;
 }
 
-export default function BoardPage({ auth, onAuthChange }) {
+export default function BoardPage({ auth, onAuthChange, onSwitchWorkspace }) {
   const [boardState, setBoardState] = useState(null);
   const [loading, setLoading] = useState(true);
   const [selectedCard, setSelectedCard] = useState(null);
@@ -381,6 +381,13 @@ export default function BoardPage({ auth, onAuthChange }) {
           <span className={`rounded-full px-3 py-1 text-xs font-semibold ${isConnected ? 'bg-emerald-100 text-emerald-700' : 'bg-amber-100 text-amber-700'}`}>
             {isConnected ? 'Live connected' : 'Reconnecting...'}
           </span>
+          <button
+            type="button"
+            onClick={onSwitchWorkspace}
+            className="rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm font-medium text-slate-700"
+          >
+            Workspaces
+          </button>
           <button
             type="button"
             onClick={handleLogout}

@@ -4,6 +4,10 @@ const Card = require('../models/Card');
 const Workspace = require('../models/Workspace');
 const { toClientCard } = require('../utils/serialize');
 
+function boardRoom(boardId) {
+  return `board:${boardId.toString()}`;
+}
+
 async function createCard(req, res, next) {
   try {
     const { boardId, columnId, title, description = '' } = req.body;
@@ -44,7 +48,7 @@ async function createCard(req, res, next) {
     column.cardOrder.push(card._id);
     await column.save();
 
-    req.io.to(boardId.toString()).emit('card:updated', {
+    req.io.to(boardRoom(boardId)).emit('card:updated', {
       action: 'created',
       card: toClientCard(card),
       columnId: column._id.toString()

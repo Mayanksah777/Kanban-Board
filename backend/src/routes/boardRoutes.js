@@ -1,9 +1,18 @@
 const express = require('express');
-const { getBoards, getBoardStateById } = require('../controllers/boardController');
+const {
+  createBoard,
+  getBoardById,
+  getBoards,
+  getBoardStateById
+} = require('../controllers/boardController');
+const { requireWorkspaceMember } = require('../middlewares/workspaceAuthMiddleware');
+const { requireBoardAccess } = require('../middlewares/boardAccessMiddleware');
 
 const router = express.Router();
 
 router.get('/', getBoards);
-router.get('/:boardId/state', getBoardStateById);
+router.post('/', requireWorkspaceMember({ source: 'body', field: 'workspaceId' }), createBoard);
+router.get('/:boardId', requireBoardAccess, getBoardById);
+router.get('/:boardId/state', requireBoardAccess, getBoardStateById);
 
 module.exports = router;

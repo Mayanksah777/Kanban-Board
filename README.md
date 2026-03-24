@@ -60,6 +60,8 @@ npm test
 
 ## Core features shipped
 - JWT auth (access + refresh)
+- Workspace-based multi-user collaboration
+- Add workspace member by email (owner action)
 - Multi-user board state + realtime sync via Socket.io
 - Card create, move, edit, delete
 - Drag and drop supports cross-column moves and within-column reorder
